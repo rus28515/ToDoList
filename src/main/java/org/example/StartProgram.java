@@ -1,4 +1,4 @@
-package org.example.asd;
+package org.example;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -56,6 +56,7 @@ public class StartProgram {
                 user.addTaskStart(tmp[1],Integer.parseInt(tmp[2]));
             }
         }
+        otherTask(log);
         startUserMenu();
     }
 
@@ -79,17 +80,31 @@ public class StartProgram {
                user.addTask();
                break;
             case 4:
-                user.printSortTaskSignificance();
+                user.implementationIsTrueInTask();
                 break;
             case 5:
                 user.deleteTask();
                 break;
             case 6:
+                user.exit();
+                writeOtherTask();
                 startMenu();
                 break;
             default:
         }
         startUserMenu();
+    }
+
+    private void writeOtherTask() {
+        try (OutputStream outputStream = new FileOutputStream("task.txt",true)) {
+
+            for (String message: otherTask){
+                message+="\n";
+                outputStream.write(message.getBytes());
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private void otherTask(String log) {
@@ -111,7 +126,6 @@ public class StartProgram {
                 otherTask.add(arrTask[i]);
             }
         }
-        System.out.println(otherTask);
     }
 
     private  boolean checkLogging(String log, String pass) {

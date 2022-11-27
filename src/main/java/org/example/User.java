@@ -1,40 +1,22 @@
 package org.example;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.Objects;
+import java.util.Scanner;
+import java.util.stream.Collectors;
 
 public class User {
     private String login;
     private String password;
+    private ArrayList<Task> listTask;
+
 
     public User(String login, String password) {
         this.login = login;
         this.password = password;
-    }
-
-    private ArrayList<Task> taskList;
-
-    public void readTask (String login){
-        String read;
-
-        try (InputStream inputStream = new FileInputStream("task.txt")) {
-            byte[] buf = new byte[inputStream.available()];
-            int count = inputStream.read(buf);
-            read = new String(buf, 0, count);
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException();
-        } catch (IOException e) {
-            throw new RuntimeException();
-        }
-        String[] arrTask = read.split("\n");
-
-
-
-
+        listTask = new ArrayList<>();
     }
 
     public String getLogin() {
@@ -53,23 +35,84 @@ public class User {
         this.password = password;
     }
 
-    @Override
-    public String toString() {
-        return "User{" +
-                "login='" + login + '\'' +
-                ", password='" + password + '\'' +
-                '}';
+    public void addTaskStart (String name, int significance){
+        listTask.add(new Task(name,significance));
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof User user)) return false;
-        return Objects.equals(getLogin(), user.getLogin());
+    public void addTask() {
+        Scanner scn = new Scanner(System.in);
+        System.out.print("Ведіть назву задачі: ");
+        String name = scn.nextLine();
+        System.out.print("Ведіть важливість задачі від 1 до 5: ");
+        int significance = scn.nextInt();
+        listTask.add(new Task(name, significance));
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(getLogin(), getPassword());
+    public void printTask() {
+        for (Task t : listTask) {
+            System.out.println(t);
+        }
+    }
+
+    public void printAllImplementationTrue() {
+        for (Task t : listTask) {
+            if (t.getImplementation() == true)
+                System.out.println(t);
+        }
+    }
+
+    public void printAllImplementationFalse() {
+        for (Task t : listTask) {
+            if (t.getImplementation() == false)
+                System.out.println(t);
+        }
+    }
+
+    public void printSortTaskSignificance() {
+        ArrayList<Task> listCopy = new ArrayList<>(listTask);
+        listCopy.stream()
+                .sorted((e1, e2) -> e1.getSignificance() - e2.getSignificance())
+                .map(e -> e.getImplementation() == false)
+                .forEach(System.out::println);
+    }
+
+    public void implementationIsTrueInTask (){
+        Scanner scn = new Scanner(System.in);
+        printAllImplementationFalse();
+        System.out.println("Ведіть Id задачі, в якій хочете поміняти статус на виконаний: ");
+        int tmp = scn.nextInt();
+        listTask.stream()
+                .map(e ->{
+                    if (e.getId()==tmp){
+                        e.setImplementation(true);
+                    }
+                    return null;
+                }).collect(Collectors.toList());
+    }
+
+    public void deleteTask() {
+        Scanner scn = new Scanner(System.in);
+        printTask();
+        System.out.println("Укажіть id задачі, яку потрібно видалити");
+        int tmp = scn.nextInt();
+        for (int i = 0; i <listTask.size() ; i++) {
+            if (listTask.get(i).getSignificance()==tmp){
+                listTask.remove(i);
+                break;
+            }
+        }
+    }
+
+
+    public void exit() {
+        try (OutputStream outputStream = new FileOutputStream("task.txt")) {
+
+            for (Task t: listTask){
+                String message = ""+login+":"+t.getName()+":"+t.getSignificance()+"\n";
+                outputStream.write(message.getBytes());
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
