@@ -16,6 +16,7 @@ public class User {
         this.password = password;
     }
 
+    // тут краще List<Task>
     private ArrayList<Task> taskList;
 
     public void readTask (String login){
