@@ -19,6 +19,14 @@ public class Task{
         implementation = false;
     }
 
+    public Task(int id, String name, int significance, boolean implementation) {
+        this.id = id;
+        this.name = name;
+        this.significance = significance;
+        this.implementation = implementation;
+        count=id;
+    }
+
     public int getId() {
         return id;
     }

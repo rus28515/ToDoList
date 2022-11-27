@@ -35,8 +35,8 @@ public class User {
         this.password = password;
     }
 
-    public void addTaskStart (String name, int significance){
-        listTask.add(new Task(name,significance));
+    public void addTaskStart (int id, String name, int significance, boolean implementation){
+        listTask.add(new Task(id,name,significance,implementation));
     }
 
     public void addTask() {
@@ -108,7 +108,7 @@ public class User {
         try (OutputStream outputStream = new FileOutputStream("task.txt")) {
 
             for (Task t: listTask){
-                String message = ""+login+":"+t.getName()+":"+t.getSignificance()+"\n";
+                String message = ""+login+":"+t.getId()+":"+t.getName()+":"+t.getSignificance()+":"+t.getImplementation()+"\n";
                 outputStream.write(message.getBytes());
             }
         } catch (IOException e) {

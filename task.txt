@@ -1,5 +1,5 @@
-runo:123:4
-runo:qaz:1
-runo:gfhjfgj:4
-badsf:123:4
-badsf:dsfsd:2
+runo:1:sdfsad:4:true
+runo:2:qaz:1:false
+runo:3:zzzzz:3:true
+runo:4:ddd:2:false
+runo:5:ttttt:5:false

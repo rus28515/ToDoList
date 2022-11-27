@@ -53,7 +53,7 @@ public class StartProgram {
         for (int i = 0; i <arrTask.length ; i++) {
             String[] tmp = arrTask[i].split(":");
             if (tmp[0].equals(log)){
-                user.addTaskStart(tmp[1],Integer.parseInt(tmp[2]));
+                user.addTaskStart(Integer.parseInt(tmp[1]), tmp[2],Integer.parseInt(tmp[3]), Boolean.parseBoolean(tmp[4]));
             }
         }
         otherTask(log);
